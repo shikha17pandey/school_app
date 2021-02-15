@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
       title: 'Student Form',
       theme: ThemeData(
         backgroundColor:Colors.blue.shade900 ,
-      ),
+        ),
+      
       home: FormScreen(),
     );
   }
