@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class DatabaseHelper {
+
 
   static final _databaseName = "school.db";
   static final _databaseVersion = 1;
@@ -31,8 +33,8 @@ class DatabaseHelper {
 
   // this opens the database (and creates it if it doesn't exist)
   _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, _databaseName);
+    var documentsDirectory = await getDatabasesPath();
+    String path = join(documentsDirectory, _databaseName);
     return await openDatabase(path,
         version: _databaseVersion,
         onCreate: _onCreate);
@@ -45,8 +47,8 @@ class DatabaseHelper {
             $columnId INTEGER PRIMARY KEY,
             $columnName TEXT NOT NULL,
             $columnAge INTEGER NOT NULL,
-            $columnSubjects TEXT NOT NULL,
-            $columnCourses TEXT NOT NULL            
+            $columnSubjects TEXT  NULL,
+            $columnCourses TEXT  NULL            
           )
           ''');
   }

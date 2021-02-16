@@ -1,20 +1,24 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'db_save.dart';
 import 'main.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class FormScreen extends StatefulWidget {
-  final dbHelper = DatabaseHelper.instance;
 
   @override
   State<StatefulWidget> createState() {
+    final dbHelper = DatabaseHelper.instance;
     return FormScreenState();
   }
 }
 class FormScreenState extends State<FormScreen>{
   String _name;
-  int _age;
+  String _age;
   String _subjects;
-  String _courses;
+  String _courses = '';
   String currentSelectedValue;
   bool checkBoxValueMCA = false;
   bool checkBoxValueBCA = false;
@@ -58,7 +62,7 @@ class FormScreenState extends State<FormScreen>{
         return null;
       },
       onSaved: (String value) {
-        _age = num.tryParse(value);
+        _age = value; //num.tryParse(value);
       },
     );
   }
@@ -76,13 +80,13 @@ class FormScreenState extends State<FormScreen>{
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 hint: Text("Select Subject"),
-                value: currentSelectedValue,
+                value: _subjects,
                 isDense: true,
                 onChanged: (newValue) {
                   setState(() {
-                    currentSelectedValue = newValue;
+                    _subjects = newValue;
                   });
-                  print(currentSelectedValue);
+                  print(_subjects);
                 },
                 items: deviceTypes.map((String value) {
                   return DropdownMenuItem<String>(
@@ -206,13 +210,13 @@ class FormScreenState extends State<FormScreen>{
           title: Center(
             child: Text(
                 'Student Registration Form ',
-            ),
+            )
           ),
      ),
 
      body: Container(
-       padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-       child: Center(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
        child: Form(
         key: _formKey,
            child: Column(
@@ -227,7 +231,7 @@ class FormScreenState extends State<FormScreen>{
                  color: Colors.blue,
                  child: Text('Apply',
                  style: TextStyle(
-                   color:Colors.black ,
+                   color:Colors.white ,
                    fontSize: 16.0,
                  ),
                  ),
@@ -236,8 +240,28 @@ class FormScreenState extends State<FormScreen>{
                      return;
                    }
                    _formKey.currentState.save();
+
+                   if(checkBoxValueMCA) {
+                     this._courses += "MCA ";
+                   }
+
+                   if(checkBoxValueBCA) {
+                     this._courses += "BCA ";
+                   }
+
+                   if(checkBoxValueBTech) {
+                     this._courses += "BTech ";
+                   }
+
+                   if(checkBoxValueMTech) {
+                     this._courses += "MTech ";
+                   }
+
+                 //  var insertDb2 = insertDb(_name, _age, currentSelectedValue, course);
+                   _insert();
                    print(_name);
                    print(_age);
+                   print(_subjects);
                    print(currentSelectedValue);
                    print(checkBoxValueMCA);
                    print(checkBoxValueBCA);
