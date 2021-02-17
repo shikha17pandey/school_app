@@ -1,6 +1,10 @@
 import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:school_app/Profile.dart';
+import 'package:school_app/Settings.dart';
+import 'package:school_app/history.dart';
 import 'db_save.dart';
 import 'main.dart';
 import 'package:path/path.dart';
@@ -14,7 +18,7 @@ class FormScreen extends StatefulWidget {
     return FormScreenState();
   }
 }
-class FormScreenState extends State<FormScreen>{
+class FormScreenState extends State<FormScreen> {
   String _name;
   String _age;
   String _subjects;
@@ -28,17 +32,20 @@ class FormScreenState extends State<FormScreen>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildName() {
-      return TextFormField(
-      decoration: InputDecoration(labelText: 'Name'),
-      validator: ( value) {
-        if (value.isEmpty) {
-          return 'Name is Required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _name = value;
-      },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        decoration: InputDecoration(labelText: 'Name'),
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Name is Required';
+          }
+          return null;
+        },
+        onSaved: (String value) {
+          _name = value;
+        },
+      ),
     );
   }
 
@@ -51,10 +58,10 @@ class FormScreenState extends State<FormScreen>{
           return 'Age is Required';
         }
         final n = num.tryParse(value);
-        if(n == null) {
+        if (n == null) {
           return '"$value" values is not a valid number';
         }
-        if(n >= 14 && n <= 35){
+        if (n >= 14 && n <= 35) {
           //
         } else {
           return 'Age should be greater then 14 & less then 35';
@@ -105,29 +112,29 @@ class FormScreenState extends State<FormScreen>{
     );
   }
 
-  Widget _buildCourses(){
- return Column(
-   crossAxisAlignment: CrossAxisAlignment.start,
-   children: [
-     SizedBox(height: 10), // 1st spacer
-     Text('Courses'),
-     Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-           Column(
-             children: [
-               Checkbox(
-                value: checkBoxValueMCA,
-                onChanged: (bool value){
-                  print(value);
-                  setState(() {
-                    checkBoxValueMCA = value;
-                 });
-                },
-              ),
-             ],
-           ),
-          Text("MCA"),
+  Widget _buildCourses() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10), // 1st spacer
+        Text('Courses'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              children: [
+                Checkbox(
+                  value: checkBoxValueMCA,
+                  onChanged: (bool value) {
+                    print(value);
+                    setState(() {
+                      checkBoxValueMCA = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Text("MCA"),
 
             Column(
               children: [
@@ -135,7 +142,7 @@ class FormScreenState extends State<FormScreen>{
 
                 Checkbox(
                   value: checkBoxValueBTech,
-                  onChanged: (bool value){
+                  onChanged: (bool value) {
                     print(value);
                     setState(() {
                       checkBoxValueBTech = value;
@@ -144,58 +151,57 @@ class FormScreenState extends State<FormScreen>{
                 ),
               ],
             ),
-        Text("BTech"),
-       ],
-     ),
-     Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       children: <Widget>[
-         Column(
-           children: [
-             Checkbox(
-               value: checkBoxValueBCA,
-               onChanged: (bool value){
-                 print(value);
-                 setState(() {
-                   checkBoxValueBCA = value;
-                 });
-               },
-             ),
-           ],
-         ),
-         Text("BCA"),
+            Text("BTech"),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              children: [
+                Checkbox(
+                  value: checkBoxValueBCA,
+                  onChanged: (bool value) {
+                    print(value);
+                    setState(() {
+                      checkBoxValueBCA = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Text("BCA"),
 
-         Column(
-           children: [
-             Checkbox(
-               value: checkBoxValueMTech,
-               onChanged: (bool value){
-                 print(value);
-                 setState(() {
-                   checkBoxValueMTech = value;
-                 });
-               },
-             ),
-           ],
-         ),
-         Text("MTech"),
-       ],
-     ),
-   ],
+            Column(
+              children: [
+                Checkbox(
+                  value: checkBoxValueMTech,
+                  onChanged: (bool value) {
+                    print(value);
+                    setState(() {
+                      checkBoxValueMTech = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Text("MTech"),
+          ],
+        ),
+      ],
 
- );
-
-}
+    );
+  }
 
   final dbHelper = DatabaseHelper.instance;
 
   void _insert() async {
     // row to insert
     Map<String, dynamic> row = {
-      DatabaseHelper.columnName : this._name,
-      DatabaseHelper.columnAge  : this._age,
-      DatabaseHelper.columnSubjects  : this._subjects,
-      DatabaseHelper.columnCourses  : this._courses,
+      DatabaseHelper.columnName: this._name,
+      DatabaseHelper.columnAge: this._age,
+      DatabaseHelper.columnSubjects: this._subjects,
+      DatabaseHelper.columnCourses: this._courses,
 
     };
     final id = await dbHelper.insert(row);
@@ -203,79 +209,142 @@ class FormScreenState extends State<FormScreen>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
 
       appBar: AppBar(
-          title: Center(
+        title: Center(
             child: Text(
-                'Student Registration Form ',
+              'Student Registration Form ',
             )
+        ),
+      ),
+
+      drawer: Drawer(
+        child: Container(
+          height: 100,
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('About Us',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20.0,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Home'),
+                onTap: () {
+                  Navigator.push(
+                    context,MaterialPageRoute(builder: (context)=>FormScreen()),
+                  );
+                },
+
+              ),
+              ListTile(
+                leading: Icon(Icons.person_rounded),
+                title: Text('Profile'),
+                onTap: () {
+                  Navigator.push(
+                    context,MaterialPageRoute(builder: (context)=>Profile()),
+                  );
+                },
+
+              ),
+              ListTile(
+                leading: Icon(Icons.history),
+                title: Text('History'),
+                onTap: () {
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MainPage()),
+                  );
+                },
+              ),
+
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Settings()),
+                  );
+                },
+              ),
+
+            ],
           ),
-     ),
+        ),
+      ),
 
-     body: Container(
-      padding: const EdgeInsets.all(20.0),
-      child: Center(
-       child: Form(
-        key: _formKey,
-           child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               _buildName(),
-               _buildAge(),
-               _buildSubjects(),
-               _buildCourses(),
-               SizedBox(height: 100),
-               RaisedButton(
-                 color: Colors.blue,
-                 child: Text('Apply',
-                 style: TextStyle(
-                   color:Colors.white ,
-                   fontSize: 16.0,
-                 ),
-                 ),
-                 onPressed: (){
-                   if(!_formKey.currentState.validate()){
-                     return;
-                   }
-                   _formKey.currentState.save();
+      body: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildName(),
+                _buildAge(),
+                _buildSubjects(),
+                _buildCourses(),
+                SizedBox(height: 100),
+                RaisedButton(
+                  color: Colors.blue,
+                  child: Text('Apply',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+                    _formKey.currentState.save();
 
-                   if(checkBoxValueMCA) {
-                     this._courses += "MCA ";
-                   }
+                    if (checkBoxValueMCA) {
+                      this._courses += "MCA ";
+                    }
 
-                   if(checkBoxValueBCA) {
-                     this._courses += "BCA ";
-                   }
+                    if (checkBoxValueBCA) {
+                      this._courses += "BCA ";
+                    }
 
-                   if(checkBoxValueBTech) {
-                     this._courses += "BTech ";
-                   }
+                    if (checkBoxValueBTech) {
+                      this._courses += "BTech ";
+                    }
 
-                   if(checkBoxValueMTech) {
-                     this._courses += "MTech ";
-                   }
+                    if (checkBoxValueMTech) {
+                      this._courses += "MTech ";
+                    }
 
-                 //  var insertDb2 = insertDb(_name, _age, currentSelectedValue, course);
-                   _insert();
-                   print(_name);
-                   print(_age);
-                   print(_subjects);
-                   print(currentSelectedValue);
-                   print(checkBoxValueMCA);
-                   print(checkBoxValueBCA);
-                   print(checkBoxValueBTech);
-                   print(checkBoxValueMTech);
-
-                 },
-               )
-             ],
-           ),
-         ),
-       ),
-     ),
-        );
+                    //  var insertDb2 = insertDb(_name, _age, currentSelectedValue, course);
+                    _insert();
+                    print(_name);
+                    print(_age);
+                    print(_subjects);
+                    print(currentSelectedValue);
+                    print(checkBoxValueMCA);
+                    print(checkBoxValueBCA);
+                    print(checkBoxValueBTech);
+                    print(checkBoxValueMTech);
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
+
 
 }
