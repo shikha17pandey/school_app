@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/Profile.dart';
@@ -207,6 +206,7 @@ class FormScreenState extends State<FormScreen> {
     final id = await dbHelper.insert(row);
     print('inserted row id: $id');
   }
+
 
   @override
   Widget build(BuildContext context) {
