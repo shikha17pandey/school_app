@@ -16,7 +16,7 @@ class HistoryTable extends State<MainPage> {
   Future<void> get_data() async {
     final row_data = await dbHelper.queryAllRows();
     this.setState(() {  this.row_data = row_data; });
-    print('row data: $row_data');
+    //print('row data: $row_data');
   }
   
   @override
@@ -106,12 +106,16 @@ class HistoryTable extends State<MainPage> {
                   children: this.row_data==null?[]: this.row_data.map((row)
                   {
                     return  TableRow(
-                        children: [
+
+                    children: [
+                      Column(children:[Text(row["id"].toString(), style: TextStyle(fontSize: 20.0))]),
                       Column(children:[Text(row["name"], style: TextStyle(fontSize: 20.0))]),
                       Column(children:[Text(row["age"].toString(), style: TextStyle(fontSize: 20.0))]),
                       Column(children:[Text(row["subjects"]==null?"":row["subjects"], style: TextStyle(fontSize: 20.0))]),
                       Column(children:[Text(row["courses"], style: TextStyle(fontSize: 20.0))]),
+
                     ]
+
                     );
                   }
                   ).toList()
